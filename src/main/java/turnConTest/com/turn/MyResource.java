@@ -401,15 +401,17 @@ public class MyResource {
 				}
 			}
 			employee = EmployeeDAO.addEmployee(userName, pass);
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy:MM:dd HH:mm:ss");
-			LocalDateTime working;
-			if(checkIn.getDayOfWeek().equals(DayOfWeek.SUNDAY))
-				working = LocalDateTime.parse(formattedDate + " " + seting.getDaily(), formatter);
-			else
-				working = LocalDateTime.parse(formattedDate + " " + seting.getWeeken(), formatter);
-			int timeStandar = working.getHour() * 60 + working.getMinute();
-			int timeLogin = checkIn.getHour() * 60 + checkIn.getMinute();
-			int diff = timeLogin - timeStandar;
+
+			int diff = 0;
+
+			if (!checkIn.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+    			int timeLogin = checkIn.getHour() * 60 + checkIn.getMinute();
+    			int timeStandard = 9 * 60 + 30; // 9:30 AM
+
+   				if (timeLogin > timeStandard) {
+        			diff = 30;}
+				}
+
 			if (diff > 0) {
 				int maxId = 0;
 		        for (String emp : employee.keySet()) {
